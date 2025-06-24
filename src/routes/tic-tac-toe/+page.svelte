@@ -19,7 +19,7 @@ const winningCombos = [
 ]
 
 function makeMove(currentValue) {
-	if (checkWinner()){
+	if (checkGameStatus()){
 		  showWinnerDialog = false;
 		  setTimeout(() => { triggerWinner(); }, 10);
 		return currentValue;
@@ -50,19 +50,42 @@ function checkWinner() {
 	}
 	return null;
 }
+
+function checkGameStatus() {
+	// First check for winner
+	const winner = checkWinner();
+	if (winner) {
+		return winner;
+	}
+	
+	// Check for draw (board full, no winner)
+	const boardFull = positions.every(position => position !== null);
+	if (boardFull) {
+		return 'Draw';
+	}
+	
+	// Game still in progress
+	return null;
+}
   $effect(() => {
-	  if (winner) {
+	  if (gameStatus) {
 		  showWinnerDialog = true;
 	  }
   });
-let winner = $derived(checkWinner());
+let gameStatus = $derived(checkGameStatus());
 </script>
 <main class="mt-5">
 <h1 class="text-5xl font-bold text-center">Tic Tac Toe</h1>
-{#if winner}<Dialog.Root open={showWinnerDialog}>
+{#if gameStatus}<Dialog.Root open={showWinnerDialog}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title class="text-5xl text-center">{winner} Wins!</Dialog.Title>
+      <Dialog.Title class="text-5xl text-center">
+        {#if gameStatus === 'Draw'}
+          It's a Draw!
+        {:else}
+          {gameStatus} Wins!
+        {/if}
+      </Dialog.Title>
       <Dialog.Description class="flex justify-center">
 	<button class="newgame" onclick={resetGame}>New Game</button>
       </Dialog.Description>
