@@ -69,7 +69,7 @@ let winner = $derived(checkWinner());
     </Dialog.Header>
   </Dialog.Content>
 </Dialog.Root>{/if}
-<section>
+<section class="px-4">
 	<h3 class="text-2xl text-center mt-4">{currentPlayer}'s Turn</h3>
 	<div class=" mt-2 mr-auto ml-auto max-w-[500px] grid grid-cols-3 grid-rows-3 auto-rows-fr gap-0">
 		{#each positions as position, i}
